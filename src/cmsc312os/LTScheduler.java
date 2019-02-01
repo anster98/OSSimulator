@@ -58,9 +58,12 @@ public class LTScheduler //decides which processes will go into ready queue base
 					return;
 				}
 			}
-                        //To ignore priority comment from here upwards to other comment
+                        
 			ReadyQ.add(process); //lowest priority. 
 		}
+                //////////////////////////////////////////////////////////////////
+                //no priority round robin
+                //ReadyQ.add(process);
                 
 	}
 	

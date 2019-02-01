@@ -3,6 +3,8 @@ package cmsc312os;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class OS {
 
@@ -26,7 +28,10 @@ public class OS {
 		
 		Scanner scan = new Scanner (System.in);
 		System.out.println("Add a process? Y or N");
-		String add = scan.nextLine();
+                //Thread.sleep(10000);
+               String add = scan.nextLine();
+                //String add = gui.getConsole();
+		//String add = gui.jTextField1.getText();
 		
 		while (add.equalsIgnoreCase("y"))
 		{
@@ -36,6 +41,7 @@ public class OS {
 				
 				System.out.println("How many for each core?");
 				int quantity = scan.nextInt();
+                                //int quantity = gui.getConsole();
 				scan.nextLine();
 				int random=0;
 				
@@ -83,7 +89,10 @@ public class OS {
 //						System.out.println("process created");
 //					}
 //				}
-                       gui.addRows(LTS.ReadyQ);
+                       DefaultTableModel m = gui.addRows(LTS.ReadyQ);
+                       gui.setjTable1(new JTable(m));
+                               
+                       System.out.println("Test");
 //			GUI gui = new GUI (LTS.ReadyQ);
 //                        gui.start();
 			long begin = System.nanoTime();

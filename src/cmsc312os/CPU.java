@@ -178,7 +178,7 @@ public class CPU//represents 1 CORE
 				else
 				{
 					nextLine=null;
-					endCycle(0);
+					endCycle(1);
 				}
 				
 			}

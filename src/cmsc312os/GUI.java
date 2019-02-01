@@ -5,6 +5,8 @@
  */
 package cmsc312os;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.PrintStream;
 import static java.lang.System.out;
 import java.util.ArrayList;
@@ -17,11 +19,13 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author An
  */
-public class GUI extends javax.swing.JFrame implements TableModelListener{
+public class GUI extends javax.swing.JFrame implements TableModelListener, ActionListener{
 
     /**
      * Creates new form GUI
      */
+    
+    String console;
     
     public GUI() {
         initComponents();
@@ -33,7 +37,20 @@ public class GUI extends javax.swing.JFrame implements TableModelListener{
         
         model.addRow(rowData);
         
+        jTextField1.addActionListener(this);
+        jTextArea2.setText("OS Simulator\n");
         
+    }
+    
+    public String getConsole()
+    {
+        return console;
+    }
+    
+    public void actionPerformed (ActionEvent e)
+    {
+        console = jTextField1.getText();
+        jTextArea2.append(console);
     }
     
     
@@ -43,7 +60,12 @@ public class GUI extends javax.swing.JFrame implements TableModelListener{
     
     }
     
-    public void addRows(ArrayList<ProcessF> list)
+    public void show (String s)
+    {
+        jTextArea2.append(s);
+    }
+    
+    public DefaultTableModel addRows(ArrayList<ProcessF> list)
     {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         Object []rowData = new Object [4];
@@ -54,6 +76,10 @@ public class GUI extends javax.swing.JFrame implements TableModelListener{
             rowData[2]=process.PCB.getFrames().size();
             model.addRow(rowData);
         }
+        model.fireTableDataChanged();
+        return model;
+        
+        
     }
 
     /**
@@ -71,6 +97,10 @@ public class GUI extends javax.swing.JFrame implements TableModelListener{
         jTextField1 = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jProgressBar2 = new javax.swing.JProgressBar();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,16 +109,18 @@ public class GUI extends javax.swing.JFrame implements TableModelListener{
 
             },
             new String [] {
-                "PID", "STATUS", "MEMORY", "Title 4"
+                "PID", "STATUS", "MEMORY"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jTextField1.setText("jTextField1");
-
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane3.setViewportView(jTextArea2);
+
+        jLabel1.setText("CPU Usage");
+
+        jTextField2.setText("Memory Usage");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -96,19 +128,48 @@ public class GUI extends javax.swing.JFrame implements TableModelListener{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+                    .addComponent(jTextField1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jProgressBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(93, 93, 93))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(155, 155, 155))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(151, 151, 151)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100)))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -153,9 +214,9 @@ public class GUI extends javax.swing.JFrame implements TableModelListener{
                 new GUI().setVisible(true);
                 
                 //redirect console output to the jtextarea, doesn't work
-                PrintStream con= new PrintStream(new TextAreaOutputStream(jTextArea2));
-                System.setOut(con);
-                System.setErr(con);
+//                PrintStream con= new PrintStream(new TextAreaOutputStream(jTextArea2));
+//                System.setOut(con);
+//                System.setErr(con);
                 // Create an instance of javax.swing.JTextArea control
 //JTextArea txtConsole = new JTextArea();
 //
@@ -180,11 +241,23 @@ public class GUI extends javax.swing.JFrame implements TableModelListener{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JProgressBar jProgressBar2;
     private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
+    public javax.swing.JTable getjTable1() {
+        return jTable1;
+    }
+
+    public void setjTable1(javax.swing.JTable jTable1) {
+        this.jTable1 = jTable1;
+    }
 }
